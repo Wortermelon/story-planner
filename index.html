@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Story Planner</title>
+<style>
+  html,body{margin:0;height:100%;background:#f4f3ee}
+  iframe{border:0;width:100%;height:100vh;display:block}
+</style>
+</head>
+<body>
+<iframe id="app" allow="clipboard-write; clipboard-read"></iframe>
+<script>
+  // The published Story Planner web-app URL.
+  var EXEC = "https://script.google.com/macros/s/AKfycbxElSPttQJUhM_XV0qLJWrJslVdesl6QhkNHCp2XemUTQnuuME-K49zwB6s_IJriN-D/exec";
+  function srcFor(page){
+    return EXEC + "?embed=1" + (page && page !== "planner" ? "&page=" + encodeURIComponent(page) : "");
+  }
+  // open the page named in this wrapper's own ?page= (defaults to the planner)
+  var initial = (new URLSearchParams(location.search)).get("page") || "planner";
+  document.getElementById("app").src = srcFor(initial);
+  // the app posts here to switch pages without leaving the (banner-free) iframe
+  window.addEventListener("message", function(e){
+    var d = e.data;
+    if (d && d.spnav) document.getElementById("app").src = srcFor(d.spnav);
+  });
+</script>
+</body>
+</html>
